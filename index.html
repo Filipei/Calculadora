@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Calculadora de Amortização - SAC</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #e0eafc, #cfdef3);
+      padding: 0;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+
+    .container {
+      background-color: #ffffff;
+      padding: 30px;
+      margin-top: 40px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      max-width: 800px;
+      width: 100%;
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: bold;
+      color: #555;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 30px;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 15px;
+      }
+
+      table, th, td {
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Calculadora de Amortização - SAC</h2>
+
+    <label>Valor do Financiamento (R$):</label>
+    <input type="number" id="valor">
+
+    <label>Taxa de Juros Mensal (%):</label>
+    <input type="number" id="juros">
+
+    <label>Número de Parcelas:</label>
+    <input type="number" id="parcelas">
+
+    <button onclick="calcular()">Calcular</button>
+
+    <table id="resultado">
+      <thead>
+        <tr>
+          <th>Parcela</th>
+          <th>Amortização</th>
+          <th>Juros</th>
+          <th>Prestação</th>
+          <th>Saldo Devedor</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    function calcular() {
+      const valor = parseFloat(document.getElementById("valor").value);
+      const juros = parseFloat(document.getElementById("juros").value) / 100;
+      const parcelas = parseInt(document.getElementById("parcelas").value);
+
+      const amortizacao = valor / parcelas;
+      let saldoDevedor = valor;
+
+      const tbody = document.getElementById("resultado").querySelector("tbody");
+      tbody.innerHTML = "";
+
+      for (let i = 1; i <= parcelas; i++) {
+        const jurosParcela = saldoDevedor * juros;
+        const prestacao = amortizacao + jurosParcela;
+        saldoDevedor -= amortizacao;
+
+        const row = `<tr>
+          <td>${i}</td>
+          <td>R$ ${amortizacao.toFixed(2)}</td>
+          <td>R$ ${jurosParcela.toFixed(2)}</td>
+          <td>R$ ${prestacao.toFixed(2)}</td>
+          <td>R$ ${saldoDevedor > 0 ? saldoDevedor.toFixed(2) : "0.00"}</td>
+        </tr>`;
+        tbody.innerHTML += row;
+      }
+    }
+  </script>
+</body>
+</html>
